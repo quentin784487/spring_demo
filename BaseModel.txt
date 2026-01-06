@@ -1,0 +1,99 @@
+public string Attorney { get; set; }
+        public string AttorneyContactPerson { get; set; }
+        public string AttorneyContactPersonNo { get; set; }
+        public bool CouncilOwned { get; set; }
+        public DateTime? DateTaken { get; set; }
+        public double DeedsOfficeExtent { get; set; }
+        public long DisposalAttorney { get; set; }
+        public string DisposalContractNo { get; set; }
+        public DateTime? DisposalContractSignedDate { get; set; }
+        public string DisposalFileNo { get; set; }
+        public DateTime? DisposalFinalisationDate { get; set; }
+        public double DisposalPrice { get; set; }
+        public DateTime? DisposalRegistrationDate { get; set; }
+        public DateTime? ExpectedRegistrationDate { get; set; }
+        public int ExpectedRegistrationDelay { get; set; }
+        public string FileNo { get; set; }
+        public string GISCode { get; set; }
+        public bool GovernmentOwned { get; set; }
+        public bool SectionalTitleScheme { get; set; }
+        public bool InLeaseProperty { get; set; }
+        public long Intrecno_StreetName { get; set; }
+        public long Intrecno_InspectionPhase { get; set; }
+        public long Intrecno_AcquisitionMethod { get; set; }
+        public long Intrecno_AcquisitionPurpose { get; set; }
+        public long Intrecno_Department { get; set; }
+        public long Intrecno_DOEMeasure { get; set; }
+        public long Intrecno_ProcessPhase { get; set; }
+        public long Intrecno_RegisteredOwner { get; set; }
+        public long Intrecno_SGMeasure { get; set; }
+        public long Intrecno_TransferLawyer { get; set; }
+        public long Intrecno_UnregisteredTownship { get; set; }
+        public long Intrecno_Councillor { get; set; }
+        public long Intrecno_Party { get; set; }
+        public long Intrecno_H_Project { get; set; }
+        public long Intrecno_H_InformalSettlement { get; set; }
+        public long Intrecno_ConstructionProgramme { get; set; }
+        public long Intrecno_PrimaryUse { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
+        public double OriginalPrice { get; set; }
+        public double PurchasePrice { get; set; }
+        public bool QualityControlled { get; set; }
+        public string QualityControlledComments { get; set; }
+        public string ReasonForRequest { get; set; }
+        public DateTime? RegistrationDate { get; set; }
+        public bool Remainder { get; set; }
+        public double SGExtent { get; set; }
+        public string StreetNumber { get; set; }
+        public bool SubDividable { get; set; }
+        public string TitleDeedLocation { get; set; }
+        public string TitleDeedNo { get; set; }
+        public DateTime? TitleDeedReceivedDate { get; set; }
+        public string TransferFile { get; set; }
+        public string FarmName { get; set; }
+        public int Limit { get; set; }
+
+        public long AccountNumber { get; set; }
+        public long AssetID { get; set; }
+        public long ParentAssetID { get; set; }
+        public long WardNumber { get; set; }
+
+        public string RippleReason { get; set; }
+        public bool AdminRipple { get; set; }
+       
+        public string SectionalTitleSchemeName { get; set; }
+        public string SectionalTitleSchemeNumber { get; set; }
+        public string SectionalTitlePhaseNumber { get; set; }
+        public long Intrecno_ManagingAgent { get; set; }
+        public string SectionalTitleContactPerson { get; set; }
+        public string SectionalTitleContactNumber { get; set; }
+        public string SectionalTitleTreasurer { get; set; }
+        public string SectionalTitleChairperson { get; set; }
+        public string SectionalTitleSecretary { get; set; }
+        public string SectionalTitleComplexName { get; set; }
+        #endregion
+
+        #region List field properties
+
+        public string RegisteredOwner { get; set; }
+        public string ProcessPhase { get; set; }
+        public string SizeRange { get; set; }
+        public string GovernmentOwnedDescription { get; set; }
+        public string DOEMeasure { get; set; }
+        public string AllotmentNo_GIS { get; set; }
+        public string Zoning { get; set; }
+        public long Intrecno_Zone { get; set; }
+        public long Intrecno_Zoning { get; set; }
+        public long Intrecno_ZoningScheme { get; set; }
+
+        /*Deeds Feed*/
+
+        public string PurchaseDate { get; set; }
+        public string SchemeName { get; set; }
+        public string Clearance { get; set; }
+        public string DeedsPurchaseDate { get; set; }
+        public string DeedsPurchasePrice { get; set; }
+        public string BuyersName { get; set; }
+        public string SellersName { get; set; }
+        public string DeedsComment { get; set; }
