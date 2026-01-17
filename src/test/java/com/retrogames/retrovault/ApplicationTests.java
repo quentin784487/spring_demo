@@ -1,10 +1,10 @@
-package com.springboot.assetmanager;
+package com.retrogames.retrovault;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AssetmanagerApplicationTests {
+class ApplicationTests {
 
 	@Test
 	void contextLoads() {

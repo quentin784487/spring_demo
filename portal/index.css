@@ -1,0 +1,26 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #222;
+  color: #fff;
+  padding: 1rem;
+}
+
+.disabled-link {
+  pointer-events: none !important;
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+.screenshot-link {
+  cursor: pointer;  
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}

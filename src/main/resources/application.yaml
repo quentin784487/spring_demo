@@ -1,3 +1,14 @@
 spring:
-  application:
-    name: assetmanager
+  datasource:
+    url: jdbc:postgresql://localhost:5432/retrovault_db
+    username: sysdba
+    password: masterkey
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
