@@ -134,7 +134,83 @@ $(document).ready(function () {
 
         reader.readAsDataURL(file);
     });
+
+    function debounce(fn, delay) {
+        let timer = null;
+        return function (...args) {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn.apply(this, args), delay);
+        };
+    }
+
+    const publisherSearch = debounce(function () {
+        const query = $(this).val();
+
+        if (query.length < 2) return;
+
+        getPublishers(query);
+    }, 400);
+
+    $('#publisher-search').on('input', publisherSearch);
+
+    const developerSearch = debounce(function () {
+        const query = $(this).val();
+
+        if (query.length < 2) return;
+
+        getDevelopers(query);
+    }, 400);
+
+    $('#developer-search').on('input', developerSearch);
 });
+
+function getPublishers(name, id) {
+    $.ajax({
+        url: 'http://localhost:8080/api/admin/publishers?name=' + name,
+        success: function (data) {
+            if (data.length == 0) {
+                $("#publisher").html('<option selected value="intro">No publishers found...</option>');
+            } else {
+                $("#publisher").html('');
+                $("#publisher").html('<option selected value="intro">Select available publisher(s)</option>');
+                for (var i = 0; i < data.length; i++) {
+                    $("#publisher").append(
+                        "<option value=" + data[i].id + ">" + data[i].name + "</option>"
+                    );
+                }
+                $("#publisher").focus();
+            }
+
+            if (id) {
+                $("#publisher").val(id);
+            }
+        }
+    });
+}
+
+function getDevelopers(name, id) {
+    $.ajax({
+        url: 'http://localhost:8080/api/admin/developers?name=' + name,
+        success: function (data) {
+            if (data.length == 0) {
+                $("#developer").html('<option selected value="intro">No developers found...</option>');
+            } else {
+                $("#developer").html('');
+                $("#developer").html('<option selected value="intro">Select available developer(s)</option>');
+                for (var i = 0; i < data.length; i++) {
+                    $("#developer").append(
+                        "<option value=" + data[i].id + ">" + data[i].name + "</option>"
+                    );
+                }
+                $("#developer").focus();
+            }
+
+            if (id) {
+                $("#developer").val(id);
+            }
+        }
+    });
+}
 
 function navigate(action) {
     if (action == 'next') {
@@ -161,6 +237,13 @@ function clearForm() {
     $('#status').val('select');
     $('#genre').val('intro');
     $('#platform').val('intro');
+    $("#developer-search").val(null);
+    $("#developer").html('');
+    $("#developer").html('<option selected value="intro">Search developer name</option>');
+    $("#publisher-search").val(null);
+    $("#publisher").html('');
+    $("#publisher").html('<option selected value="intro">Search publisher name</option>');
+
     downloadURLs = [];
 }
 
@@ -267,8 +350,8 @@ function loadGames(page, size, title) {
                     "   <td>" + response.content[i].title + "</td>" +
                     "   <td>" + games[i].description + "</td>" +
                     "   <td>" + games[i].releaseYear + "</td>" +
-                    "   <td>" + games[i].developer + "</td>" +
-                    "   <td>" + games[i].publisher + "</td>" +
+                    "   <td>" + games[i].developer.name + "</td>" +
+                    "   <td>" + games[i].publisher.name + "</td>" +
                     "   <td>" + games[i].status + "</td>" +
                     "   <td>" +
                     "       <div class='dropdown'>" +
@@ -318,8 +401,10 @@ function populateModalForm(game) {
     $("#title").val(game.title);
     $("#description").val(game.description);
     $("#releaseYear").val(game.releaseYear);
-    $("#developer").val(game.developer);
-    $("#publisher").val(game.publisher);
+
+    getDevelopers(game.developer.name, game.developer.id);
+    getPublishers(game.publisher.name, game.publisher.id);
+
     $("#coverImage").val(game.coverImage);
     coverImage = game.coverImage
     if (coverImage) {
@@ -456,6 +541,14 @@ function validateForm() {
     }
 
     if ($("#platform option:selected").val() == 'intro') {
+        return false;
+    }
+
+    if ($("#developer option:selected").val() == 'intro') {
+        return false;
+    }
+
+    if ($("#publisher option:selected").val() == 'intro') {
         return false;
     }
 
