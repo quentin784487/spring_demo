@@ -1,12 +1,12 @@
 package com.retrogames.retrovault.service;
 
+import com.retrogames.retrovault.dto.*;
 import com.retrogames.retrovault.entity.*;
-import com.retrogames.retrovault.repository.GameRepository;
-import com.retrogames.retrovault.repository.GenreRepository;
-import com.retrogames.retrovault.repository.PlatformRepository;
+import com.retrogames.retrovault.repository.*;
 import com.retrogames.retrovault.request.GameRequest;
 import com.retrogames.retrovault.request.DownloadRequest;
 import com.retrogames.retrovault.request.ImageRequest;
+import com.retrogames.retrovault.response.GameResponse;
 import com.retrogames.retrovault.response.LookupResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -28,17 +29,97 @@ public class GameService {
     private final GameRepository gameRepository;
     private final GenreRepository genreRepository;
     private final PlatformRepository platformRepository;
+    private final DeveloperRepository developerRepository;
+    private final PublisherRepository publisherRepository;
 
-    public Page<Game> list(int page, int size, String title) {
+    public Page<GameResponse> list(int page, int size, String title) {
         Pageable pageable = PageRequest.of(
                 page,
                 size,
                 Sort.by("id").descending()
         );
 
-        return title.equals("none")
+        Page<Game> games = title.equals("none")
                 ? gameRepository.findAll(pageable)
                 : gameRepository.findByTitleContainingIgnoreCase(title, pageable);
+
+        return games.map(this::toGameListDto);
+    }
+
+    private GameResponse toGameListDto(Game game) {
+        return new GameResponse(
+                game.getId(),
+                game.getTitle(),
+                game.getDescription(),
+                game.getReleaseYear(),
+                toPublisherDTO(game.getPublisher()),
+                toDeveloperDTO(game.getDeveloper()),
+                game.getStatus(),
+                game.getCoverImage(),
+                toGenreDTO(game.getGenres()),
+                toPlatformDTO(game.getPlatforms()),
+                toDownloadDTO(game.getDownloads()),
+                toImageDTO(game.getImages())
+        );
+    }
+
+    private LookupDTO toPublisherDTO(Publisher publisher) {
+        return new LookupDTO(
+                publisher.getId(),
+                publisher.getName()
+        );
+    }
+
+    private LookupDTO toDeveloperDTO(Developer developer) {
+        return new LookupDTO(
+                developer.getId(),
+                developer.getName()
+        );
+    }
+
+    private List<LookupDTO> toGenreDTO(Set<Genre> genres) {
+        List<LookupDTO> _genres = new ArrayList<>();
+        for (Genre genre : genres) {
+            _genres.add(new LookupDTO(
+                genre.getId(),
+                genre.getName()
+            ));
+        }
+        return _genres;
+    }
+
+    private List<LookupDTO> toPlatformDTO(Set<Platform> platforms) {
+        List<LookupDTO> _platforms = new ArrayList<>();
+        for (Platform platform : platforms) {
+            _platforms.add(new LookupDTO(
+                    platform.getId(),
+                    platform.getName()
+            ));
+        }
+        return _platforms;
+    }
+
+    private List<DownloadDTO> toDownloadDTO(Set<Download> downloads) {
+        List<DownloadDTO> _downloads = new ArrayList<>();
+        for (Download download : downloads) {
+            _downloads.add(new DownloadDTO(
+                    download.getId(),
+                    download.getDownloadUrl()
+            ));
+        }
+        return _downloads;
+    }
+
+    private List<ImageDTO> toImageDTO(Set<Image> images) {
+        List<ImageDTO> _images = new ArrayList<>();
+        for (Image download : images) {
+            _images.add(new ImageDTO(
+                    download.getId(),
+                    download.getImage(),
+                    download.getFileName()
+            ));
+        }
+        return _images;
     }
 
     public List<Genre> getAllGenres() {
@@ -47,6 +128,14 @@ public class GameService {
 
     public List<Platform> getAllPlatforms() {
         return platformRepository.findAll();
+    }
+
+    public List<Developer> getDevelopersContainingName(String name) {
+        return developerRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    public List<Publisher> getPublishersContainingName(String name) {
+        return publisherRepository.findByNameContainingIgnoreCase(name);
     }
 
     public LookupResponse getAllLookups() {
@@ -66,8 +155,19 @@ public class GameService {
         game.setTitle(request.title());
         game.setDescription(request.description());
         game.setReleaseYear(request.releaseYear());
-        game.setDeveloper(request.developer());
-        game.setPublisher(request.publisher());
+
+        Developer developer = developerRepository.findById(request.developer());
+
+        if (developer != null) {
+            game.setDeveloper(developer);
+        }
+
+        Publisher publisher = publisherRepository.findById(request.publisher());
+
+        if (publisher != null) {
+            game.setPublisher(publisher);
+        }
+
         game.setStatus(request.status());
         game.setCoverImage(request.coverImage());
 
@@ -117,8 +217,19 @@ public class GameService {
         game.setTitle(request.title());
         game.setDescription(request.description());
         game.setReleaseYear(request.releaseYear());
-        game.setDeveloper(request.developer());
-        game.setPublisher(request.publisher());
+
+        Developer developer = developerRepository.findById(request.developer());
+
+        if (developer != null) {
+            game.setDeveloper(developer);
+        }
+
+        Publisher publisher = publisherRepository.findById(request.publisher());
+
+        if (publisher != null) {
+            game.setPublisher(publisher);
+        }
+
         game.setStatus(request.status());
         game.setCoverImage(request.coverImage());
 

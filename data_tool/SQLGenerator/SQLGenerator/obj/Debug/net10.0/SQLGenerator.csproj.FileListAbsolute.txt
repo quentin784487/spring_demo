@@ -1,0 +1,14 @@
+D:\_systems\SQLGenerator\SQLGenerator\bin\Debug\net10.0\SQLGenerator.exe
+D:\_systems\SQLGenerator\SQLGenerator\bin\Debug\net10.0\SQLGenerator.deps.json
+D:\_systems\SQLGenerator\SQLGenerator\bin\Debug\net10.0\SQLGenerator.runtimeconfig.json
+D:\_systems\SQLGenerator\SQLGenerator\bin\Debug\net10.0\SQLGenerator.dll
+D:\_systems\SQLGenerator\SQLGenerator\bin\Debug\net10.0\SQLGenerator.pdb
+D:\_systems\SQLGenerator\SQLGenerator\obj\Debug\net10.0\SQLGenerator.GeneratedMSBuildEditorConfig.editorconfig
+D:\_systems\SQLGenerator\SQLGenerator\obj\Debug\net10.0\SQLGenerator.AssemblyInfoInputs.cache
+D:\_systems\SQLGenerator\SQLGenerator\obj\Debug\net10.0\SQLGenerator.AssemblyInfo.cs
+D:\_systems\SQLGenerator\SQLGenerator\obj\Debug\net10.0\SQLGenerator.csproj.CoreCompileInputs.cache
+D:\_systems\SQLGenerator\SQLGenerator\obj\Debug\net10.0\SQLGenerator.dll
+D:\_systems\SQLGenerator\SQLGenerator\obj\Debug\net10.0\refint\SQLGenerator.dll
+D:\_systems\SQLGenerator\SQLGenerator\obj\Debug\net10.0\SQLGenerator.pdb
+D:\_systems\SQLGenerator\SQLGenerator\obj\Debug\net10.0\SQLGenerator.genruntimeconfig.cache
+D:\_systems\SQLGenerator\SQLGenerator\obj\Debug\net10.0\ref\SQLGenerator.dll

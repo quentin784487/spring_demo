@@ -1,10 +1,20 @@
+CREATE TABLE IF NOT EXISTS developers (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS publishers (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS games (
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     release_year INT,
-    developer VARCHAR(255) NOT NULL,
-    publisher VARCHAR(255) NOT NULL,
+    developer_id INT NOT NULL REFERENCES developers(id) ON DELETE CASCADE,
+    publisher_id INT NOT NULL REFERENCES publishers(id) ON DELETE CASCADE,
     status VARCHAR(50) NOT NULL,
     cover_image TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
