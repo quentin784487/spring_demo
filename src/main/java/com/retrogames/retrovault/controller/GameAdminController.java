@@ -1,6 +1,7 @@
 package com.retrogames.retrovault.controller;
 
 import com.retrogames.retrovault.entity.Game;
+import com.retrogames.retrovault.response.GameResponse;
 import com.retrogames.retrovault.response.LookupResponse;
 import com.retrogames.retrovault.service.GameService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ public class GameAdminController {
     private final GameService service;
 
     @GetMapping
-    public Page<Game> list(
+    public Page<GameResponse> list(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String title

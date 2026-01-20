@@ -1,5 +1,6 @@
 package com.retrogames.retrovault.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,12 +24,21 @@ public class Game {
     private String description;
 
     private Integer releaseYear;
-    private String developer;
-    private String publisher;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "publisher_id", nullable = false)
+    @JsonBackReference
+    private Publisher publisher;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "developer_id", nullable = false)
+    @JsonBackReference
+    private Developer developer;
 
     @Enumerated(EnumType.STRING)
     private GameStatus status;
 
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String coverImage;
 
     /* Genres */
