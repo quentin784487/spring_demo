@@ -1,13 +1,30 @@
 INSERT INTO genres (name)
 VALUES
-    ('Strategy'),
-    ('Real-Time Strategy');
+    ('Action'),
+    ('Adventure'),
+    ('Educational'),
+    ('Puzzle'),
+    ('Racing / Driving'),
+    ('Role-Playing (RPG)'),
+    ('Simulation'),
+    ('Sports'),
+    ('Strategy (RTS)');
 
 
 INSERT INTO platforms (name)
 VALUES
-    ('MS-DOS'),
-    ('Amiga');
+    ('3DO'), ('Acorn 32-bit'), ('Adventure Vision'), ('Amiga'), ('Amiga CD32'), ('Amstrad CPC'), ('Amstrad PCW'), ('Apple II'), ('Apple IIgs'),
+    ('Arcade'), ('Atari 2600'), ('Atari 5200'), ('Atari 7800'), ('Atari 8-bit'), ('Atari ST'), ('Bally Astrocade'), ('BBC Micro'), ('BeOS'), ('BlackBerry'),
+    ('BREW'), ('Casio Loopy'), ('Casio PV-1000'), ('Casio PV-2000'), ('CD-i'), ('CDTV'), ('Channel F'), ('ColecoVision'), ('Commodore 128'), ('Commodore 16'),
+    ('Plus/4'), ('Commodore 64'), ('Commodore PET/CBM'), ('Didj'), ('digiBlast'), ('DOS'), ('Dragon 32/64'), ('DVD Player'), ('Electron'), ('Epoch Game Pocket Computer'),
+    ('Epoch Super Cassette Vision'), ('ExEn'), ('FM Towns'), ('FM-7'), ('Gakken Compact Vision TV Boy'), ('Game Gear'), ('Game Wave'), ('Game.Com'), ('Genesis'), ('Gizmondo'),
+    ('GoGo TV'), ('GP32'), ('Hasbro iON'), ('Hitachi Basic Master Level 3'), ('Hitachi S1'), ('HyperScan'), ('Intellivision'), ('J2ME'), ('Jaguar'), ('Leapster'),
+    ('Linux'), ('LJN Video Art'), ('Lynx'), ('Mac'), ('Mainframe'), ('Mitsubishi Multi-8'), ('Mophun'), ('MRE'), ('MSX'), ('N-Gage'),
+    ('Neo Geo'), ('Neo Geo CD'), ('Nuon'), ('Odyssey 2'), ('OS/2'), ('Palm OS'), ('PC Booter'), ('PC-88'), ('PC-98'), ('PC-FX'),
+    ('Pico Beena'), ('Pippin'), ('SAM Coupé'), ('SEGA 32X'), ('SEGA CD'), ('SEGA Master System'), ('SEGA Pico'), ('SEGA Saturn'), ('SG-1000'), ('Sharp X68000'),
+    ('Super A''can'), ('Supervision'), ('Symbian'), ('TRS-80'), ('TRS-80 CoCo'), ('TurboGrafx CD'), ('TurboGrafx-16'), ('V.Flash'), ('Vectrex'), ('VIC-20'),
+    ('VideoBrain'), ('VideoNow XP'), ('Videopac+ G7400'), ('VIS'), ('VNDS'), ('Windows'), ('Windows 3.x'), ('Windows Mobile'), ('WonderSwan'), ('WonderSwan Color'),
+    ('XaviXPORT'), ('Zeebo'), ('Zodiac'), ('Zune'), ('ZX Spectrum'), ('ZX81');
 
 INSERT INTO publishers (name)
 VALUES
