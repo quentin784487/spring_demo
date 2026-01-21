@@ -29,7 +29,7 @@
     <!-- Example: Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 
 </head>
 
@@ -96,7 +96,7 @@
         </div>
 
         <!-- Modal -->
-        <div id="crud-modal" class="modal modal-lg fade" tabindex="-1" aria-labelledby="exampleModalLabel"
+        <div id="crud-modal" class="modal modal-xl fade" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -108,93 +108,118 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-12 text-center bg-info">
+                                <label class="form-label text-light mt-2">
+                                    <b>Game Information</b>
+                                </label>
+                            </div>
+                            <div class="col-md-3 mt-2">
                                 <label class="form-label">
-                                    Title
+                                    <b>Title</b>
                                 </label>
                                 <input type="text" id="title" class="form-control" />
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-3 mt-2">
                                 <label class="form-label">
-                                    Description
-                                </label>
-                                <textarea class="form-control" id="description" rows="3"></textarea>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">
-                                    Release Year
+                                    <b>Release Year</b>
                                 </label>
                                 <input type="number" id="releaseYear" class="form-control" />
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3 mt-2">
                                 <label class="form-label">
-                                    Status
-                                </label>
-                                <select id="status" class="form-select" aria-label="Select Status">
-                                    <option selected value="select">Select Status</option>
-                                    <option value="ABANDONWARE">ABANDONWARE</option>
-                                    <option value="FREEWARE">FREEWARE</option>
-                                    <option value="COMMERCIAL">COMMERCIAL</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">
-                                    Search Developers
-                                </label>                               
-                                <input class="form-control" type="text" id="developer-search" placeholder="Search Developer"> 
-                                <br/>
-                                <label class="form-label">
-                                    Developer(s)
-                                </label>  
-                                <br/>
-                                <select id="developer" class="form-select" aria-label="Select Genre">
-                                    <option selected value="intro">Search developer name</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">
-                                    Search Publishers
-                                </label>
-                                <input class="form-control" type="text" id="publisher-search" placeholder="Search Publisher"> 
-                                <br/>
-                                <label class="form-label">
-                                    Publisher(s)
-                                </label><br/>
-                                <select id="publisher" class="form-select" aria-label="Select Publisher">
-                                    <option selected value="intro">Search publisher name</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">
-                                    Genre
+                                    <b>Genre</b>
                                 </label>
                                 <select id="genre" class="form-select" aria-label="Select Genre">
                                     <option selected value="intro">Select Genre</option>
                                 </select>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3 mt-2">
                                 <label class="form-label">
-                                    Platform
+                                    <b>Platform</b>
                                 </label>
                                 <select id="platform" class="form-select" aria-label="Select Genre">
                                     <option selected value="intro">Select Platform</option>
                                 </select>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <label class="form-label">
-                                    Cover Image
+                                    <b>Description</b>
+                                </label>
+                                <textarea class="form-control" id="description" rows="5"></textarea>
+                            </div>
+                            <div class="col-md-12 text-center bg-info mt-4">
+                                <label class="form-label text-light mt-2">
+                                    <b>Creator Information</b>
+                                </label>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6 mt-2">
+                                        <label class="form-label">
+                                            <b>Search Developers</b>
+                                        </label>
+                                        <input class="form-control" type="text" id="developer-search"
+                                            placeholder="Search Developer">
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <label class="form-label">
+                                            <b>Developer(s)</b>
+                                        </label>
+                                        <select id="developer" class="form-select" aria-label="Select Genre">
+                                            <option selected value="intro">Search developer name</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6 mt-2">
+                                        <label class="form-label">
+                                            <b>Search Publishers</b>
+                                        </label>
+                                        <input class="form-control" type="text" id="publisher-search"
+                                            placeholder="Search Publisher">
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <label class="form-label">
+                                            <b>Select Publisher</b>
+                                        </label>
+                                        <select id="publisher" class="form-select" aria-label="Select Publisher">
+                                            <option selected value="intro">Search publisher name</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12 mt-2">
+                                        <label class="form-label">
+                                            <b>Publisher(s)</b>
+                                        </label>
+                                        <ul id="url-list" class="list-group">
+                                            <li class="list-group-item text-center">Items</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 text-center bg-info mt-4">
+                                <label class="form-label text-light mt-2">
+                                    <b>Content Information</b>
+                                </label>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <label class="form-label">
+                                    <b>Cover Image</b>
                                 </label>
                                 <input class="form-control" type="file" id="coverImageInput">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 mt-2">
                                 <label class="form-label">
-                                    Image Link
-                                </label>                                
-                                <label id="coverImageLink" class="form-control screenshot-link" onclick="previewCoverImage()">Please select an image file.</label>
+                                    <b>Image Link</b>
+                                </label>
+                                <label id="coverImageLink" class="form-control screenshot-link"
+                                    onclick="previewCoverImage()">Please select an image file.</label>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 mt-2">
                                 <label class="form-label">
-                                    Download URL
+                                    <b>Download URL</b>
                                 </label>
                                 <div class="input-group mb-3">
                                     <input id="downloadUrl" type="text" class="form-control" placeholder="Download URL"
@@ -202,23 +227,23 @@
                                     <button class="btn btn-outline-secondary" type="button" id="add-url">+ Add</button>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 mt-2">
                                 <label class="form-label">
-                                    URL's
+                                    <b>URL(s)</b>
                                 </label>
                                 <ul id="url-list" class="list-group">
-                                    <li class="list-group-item text-center">Items</li>                                    
+                                    <li class="list-group-item text-center">Items</li>
                                 </ul>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">
-                                    Screenshots
+                                    <b>Screenshots</b>
                                 </label>
                                 <input class="form-control" type="file" id="fileInput">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">
-                                    Files
+                                    <b>Files</b>
                                 </label>
                                 <ul id="screenshot-list" class="list-group">
                                     <li class="list-group-item text-center">Items</li>
@@ -229,7 +254,7 @@
                     <div class="modal-footer">
                         <p id="validation-message" hidden="true" style="color: red;">Please complete all fields.</p>
                         <button type="button" class="btn btn-secondary close">Close</button>
-                        <button id="save" type="button" class="btn btn-primary">Save</button>
+                        <button id="save" type="button" class="btn btn-info">Save</button>
                     </div>
                 </div>
             </div>
@@ -279,7 +304,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <img id="screenshot-preview" alt="Preview"/>
+                        <img id="screenshot-preview" alt="Preview" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
