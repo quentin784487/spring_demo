@@ -17,6 +17,10 @@ public class Download {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
+    private DownloadType type;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String downloadUrl;
 

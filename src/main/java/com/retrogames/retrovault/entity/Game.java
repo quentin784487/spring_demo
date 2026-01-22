@@ -26,11 +26,6 @@ public class Game {
     private Integer releaseYear;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "publisher_id", nullable = false)
-    @JsonBackReference
-    private Publisher publisher;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "developer_id", nullable = false)
     @JsonBackReference
     private Developer developer;
@@ -58,6 +53,15 @@ public class Game {
             inverseJoinColumns = @JoinColumn(name = "platform_id")
     )
     private Set<Platform> platforms = new HashSet<>();
+
+    /* Publishers */
+    @ManyToMany
+    @JoinTable(
+            name = "game_publishers",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "publisher_id")
+    )
+    private Set<Publisher> publishers = new HashSet<>();
 
     /* Downloads */
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)

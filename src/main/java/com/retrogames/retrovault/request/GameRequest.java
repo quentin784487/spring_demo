@@ -1,5 +1,6 @@
 package com.retrogames.retrovault.request;
 
+import com.retrogames.retrovault.dto.LookupDTO;
 import com.retrogames.retrovault.entity.GameStatus;
 import java.util.Set;
 
@@ -8,7 +9,7 @@ public record GameRequest(
         String description,
         Integer releaseYear,
         Integer developer,
-        Integer publisher,
+        Set<PublisherRequest> publishers,
         GameStatus status,
         String coverImage,
         Integer genre,

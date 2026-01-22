@@ -21,7 +21,7 @@ public class Publisher {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(mappedBy = "publishers")
     @JsonIgnore
     private Set<Game> games = new HashSet<>();
 }

@@ -10,7 +10,7 @@ public record GameResponse(
         String title,
         String description,
         Integer releaseYear,
-        LookupDTO publisher,
+        List<LookupDTO> publishers,
         LookupDTO developer,
         GameStatus status,
         String coverImage,

@@ -6,6 +6,7 @@ import com.retrogames.retrovault.repository.*;
 import com.retrogames.retrovault.request.GameRequest;
 import com.retrogames.retrovault.request.DownloadRequest;
 import com.retrogames.retrovault.request.ImageRequest;
+import com.retrogames.retrovault.request.PublisherRequest;
 import com.retrogames.retrovault.response.GameResponse;
 import com.retrogames.retrovault.response.LookupResponse;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -52,7 +54,7 @@ public class GameService {
                 game.getTitle(),
                 game.getDescription(),
                 game.getReleaseYear(),
-                toPublisherDTO(game.getPublisher()),
+                toPublisherDTO(game.getPublishers()),
                 toDeveloperDTO(game.getDeveloper()),
                 game.getStatus(),
                 game.getCoverImage(),
@@ -63,11 +65,15 @@ public class GameService {
         );
     }
 
-    private LookupDTO toPublisherDTO(Publisher publisher) {
-        return new LookupDTO(
-                publisher.getId(),
-                publisher.getName()
-        );
+    private List<LookupDTO> toPublisherDTO(Set<Publisher> publishers) {
+        List<LookupDTO> _publishers = new ArrayList<>();
+        for (Publisher publisher : publishers) {
+            _publishers.add(new LookupDTO(
+                    publisher.getId(),
+                    publisher.getName()
+            ));
+        }
+        return _publishers;
     }
 
     private LookupDTO toDeveloperDTO(Developer developer) {
@@ -104,6 +110,8 @@ public class GameService {
         for (Download download : downloads) {
             _downloads.add(new DownloadDTO(
                     download.getId(),
+                    download.getName(),
+                    download.getType(),
                     download.getDownloadUrl()
             ));
         }
@@ -120,6 +128,15 @@ public class GameService {
             ));
         }
         return _images;
+    }
+
+    private Set<Publisher> toPublisherSet(Set<PublisherRequest> publisherRequests) {
+        Set<Publisher> publishers = new java.util.HashSet<>();
+        for (PublisherRequest pr : publisherRequests) {
+            Optional<Publisher> publisher = publisherRepository.findById(pr.id());
+            publishers.add(publisher.orElse(null));
+        }
+        return publishers;
     }
 
     public List<Genre> getAllGenres() {
@@ -162,10 +179,10 @@ public class GameService {
             game.setDeveloper(developer);
         }
 
-        Publisher publisher = publisherRepository.findById(request.publisher());
+        Set<Publisher> publishers = toPublisherSet(request.publishers());
 
-        if (publisher != null) {
-            game.setPublisher(publisher);
+        if (!publishers.isEmpty()) {
+            game.setPublishers(publishers);
         }
 
         game.setStatus(request.status());
@@ -191,7 +208,7 @@ public class GameService {
         if (request.downloads() != null) {
             for (DownloadRequest d : request.downloads()) {
                 Download download = new Download();
-                download.setDownloadUrl(d.downloadUrl());
+                download.setDownloadUrl(d.link());
                 game.addDownload(download);
             }
         }
@@ -224,10 +241,12 @@ public class GameService {
             game.setDeveloper(developer);
         }
 
-        Publisher publisher = publisherRepository.findById(request.publisher());
+        Set<Publisher> publishers = toPublisherSet(request.publishers());
 
-        if (publisher != null) {
-            game.setPublisher(publisher);
+        game.getPublishers().clear();
+
+        if (!publishers.isEmpty()) {
+            game.setPublishers(publishers);
         }
 
         game.setStatus(request.status());
@@ -258,7 +277,7 @@ public class GameService {
         if (request.downloads() != null) {
             for (DownloadRequest d : request.downloads()) {
                 Download download = new Download();
-                download.setDownloadUrl(d.downloadUrl());
+                download.setDownloadUrl(d.link());
                 game.addDownload(download);
             }
         }

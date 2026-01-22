@@ -23,6 +23,4 @@ public class Genre {
     @ManyToMany(mappedBy = "genres")
     @JsonIgnore
     private Set<Game> games = new HashSet<>();
-
-
 }

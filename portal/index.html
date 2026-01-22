@@ -76,19 +76,14 @@
                             <th></th>
                         </thead>
                         <tbody id="table-body">
-
                         </tbody>
-                        <tfoot>
-
-                        </tfoot>
                     </table>
                 </div>
             </div>
             <div class="row justify-content-center">
                 <div class="col-md-2">
-                    <nav aria-label="Page navigation example">
+                    <nav aria-label="Page navigation">
                         <ul class="pagination">
-
                         </ul>
                     </nav>
                 </div>
@@ -113,11 +108,17 @@
                                     <b>Game Information</b>
                                 </label>
                             </div>
-                            <div class="col-md-3 mt-2">
+                            <div class="col-md-12 mt-2">
                                 <label class="form-label">
                                     <b>Title</b>
                                 </label>
                                 <input type="text" id="title" class="form-control" />
+                            </div>
+                            <div class="col-md-12 mt-2">
+                                <label class="form-label">
+                                    <b>Description</b>
+                                </label>
+                                <textarea class="form-control" id="description" rows="5"></textarea>
                             </div>
                             <div class="col-md-3 mt-2">
                                 <label class="form-label">
@@ -141,11 +142,16 @@
                                     <option selected value="intro">Select Platform</option>
                                 </select>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-3 mt-2">
                                 <label class="form-label">
-                                    <b>Description</b>
+                                    Status
                                 </label>
-                                <textarea class="form-control" id="description" rows="5"></textarea>
+                                <select id="status" class="form-select" aria-label="Select Status">
+                                    <option selected value="select">Select Download Type</option>
+                                    <option value="ABANDONWARE">Abandonware</option>
+                                    <option value="FREEWARE">Freeware</option>
+                                    <option value="COMMERCIAL">Commercial</option>
+                                </select>
                             </div>
                             <div class="col-md-12 text-center bg-info mt-4">
                                 <label class="form-label text-light mt-2">
@@ -189,7 +195,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-12 mt-2">
-                                        <label class="form-label">                                            
+                                        <label class="form-label">
                                         </label>
                                         <ul id="publisher-list" class="list-group">
                                             <li class="list-group-item text-center"><b>Publisher(s)</b></li>
@@ -220,28 +226,52 @@
                                 <label class="form-label">
                                     <b>Download URL</b>
                                 </label>
-                                <div class="input-group mb-3">
-                                    <input id="downloadUrl" type="text" class="form-control" placeholder="Download URL"
-                                        aria-label="Download URL" aria-describedby="add-url">
-                                    <button class="btn btn-outline-secondary" type="button" id="add-url">+ Add</button>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mt-2">
+                                <input id="download-url" type="text" class="form-control" placeholder="Download URL"
+                                    aria-label="Download URL" aria-describedby="add-url">
                                 <label class="form-label">
-                                    <b>URL(s)</b>
+                                    <b>Download Name</b>
                                 </label>
-                                <ul id="url-list" class="list-group">
-                                    <li class="list-group-item text-center">Items</li>
-                                </ul>
+                                <input id="download-name" type="text" class="form-control" placeholder="Download Name"
+                                    aria-label="Download Name" aria-describedby="add-url">
+                                <label class="form-label mt-2">
+                                    <b>Download Type</b>
+                                </label>
+                                <select id="download-type" class="form-select" aria-label="Select Download Type">
+                                    <option selected value="select">Select Status</option>
+                                    <option value="DOWNLOAD">Download</option>
+                                    <option value="DEMO">Demo</option>
+                                    <option value="MISC">Misc</option>
+                                    <option value="MANUAL">Manual</option>
+                                </select>
+                                <div class="d-grid gap-2">
+                                    <button id="download-add" class="btn btn-outline-secondary mt-2" type="button">
+                                        <i class="bi bi-plus-circle"></i>
+                                    </button>                                
+                                </div>                                
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">
+                                <label class="form-label mt-2">
+                                    <b>Downloads(s)</b>
+                                </label>
+                                <table id="download-list" class="table">
+                                    <thead>
+                                        <th>Type</th>
+                                        <th>Name</th>
+                                        <th>Link</th>
+                                        <th></th>
+                                    </thead>
+                                    <tbody id="link-table-body">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label mt-2">
                                     <b>Screenshots</b>
                                 </label>
                                 <input class="form-control" type="file" id="fileInput">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">
+                                <label class="form-label mt-2">
                                     <b>Files</b>
                                 </label>
                                 <ul id="screenshot-list" class="list-group">
@@ -302,7 +332,7 @@
                         <h5 class="modal-title">Image Preview</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body text-center">
                         <img id="screenshot-preview" alt="Preview" />
                     </div>
                     <div class="modal-footer">

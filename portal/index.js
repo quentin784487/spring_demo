@@ -22,8 +22,8 @@ $(document).ready(function () {
         loadLookups();
     });
 
-    $("#add-url").click(function () {
-        addURL();
+    $("#download-add").click(function () {
+        addDownload();
     });
 
     $("#save").click(function () {
@@ -50,7 +50,7 @@ $(document).ready(function () {
                     "description": $("#description").val(),
                     "releaseYear": $("#releaseYear").val(),
                     "developer": $("#developer").val(),
-                    "publisher": $("#publisher").val(),
+                    "publishers": publishers,
                     "status": $("#status option:selected").val(),
                     "coverImage": coverImage,
                     "genre": parseInt($("#genre option:selected").val()),
@@ -252,7 +252,7 @@ function clearForm() {
     $("#developer").val(null);
     $("#publisher").val(null);
     $("#coverImageInput").val('');
-    $("#downloadUrl").val(null);
+    $("#download-item").val(null);
     $("#url-list").html('');
     $("#url-list").append('<li class="list-group-item text-center">Items</li>');
     $("#screenshot-list").html('');
@@ -433,7 +433,7 @@ function populateModalForm(game) {
     if (coverImage) {
         $("#coverImageLink").text('Upoaded Image');
     }
-    $("#downloadUrl").val(game.downloadUrl);
+    $("#download-item").val(game.downloadUrl);
     $('#status').val(game.status);
 
     $("#url-list").html('');
@@ -498,27 +498,43 @@ function previewCoverImage() {
     }
 }
 
-function addURL() {
-    if ($("#downloadUrl").val()) {
+function addDownload() {
+    if ($("#download-url").val() != '' && $("#download-name").val() != '' && $("#download-type option:selected").val() != 'select') {
         downloadURLCount = downloadURLCount + 1;
-        downloadURLs.push($("#downloadUrl").val());
-        $("#url-list").append(
-            "<li id=" + downloadURLCount + " class='list-group-item'>" +
-            "    <div class='d-flex justify-content-between'>" +
-            "        <label class='form-label align-self-center'>" + $("#downloadUrl").val() + "</label>" +
-            "        <button onclick='deleteUrl(this)' class='btn btn-danger btn-sm'>" +
-            "            <i class='bi bi-trash'></i>" +
-            "        </button>" +
-            "    </div>" +
-            "</li>"
+        downloadURLs.push(
+            {
+                "link": $("#download-url").val(),
+                "name": $("#download-name").val(),
+                "type": $("#download-type").val()
+            }
         );
-        $("#downloadUrl").val('');
+
+        $("#link-table-body").append(
+            "<tr id='" + downloadURLCount + "'> " +
+            "   <td>" + $("#download-type option:selected").text() + "</td>" +
+            "   <td>" + $("#download-name").val() + "</td>" +            
+            "   <td>" +
+            "       <div class='dropdown'>" +
+            "           <button class='btn btn-secondary dropdown-toggle' type='button' data-bs-toggle='dropdown' aria-expanded='false'>" +
+            "               Actions" +
+            "           </button>" +
+            "           <ul class='dropdown-menu'>" +
+            "               <li><a class='dropdown-item' href='#'>Edit</a></li>" +
+            "               <li><a onclick='deleteDownloadLink(this)' class='dropdown-item' href='#'>Delete</a></li>" +
+            "           </ul>" +
+            "       </div>" +
+            "   </td>" +
+            "</tr>"
+        );
+        $("#download-url").val('');
+        $("#download-name").val('');
+        $("#download-type").val('select')
     }
 }
 
-function deleteUrl(element) {
-    $(element).closest('li').remove();
-    const index = parseInt($(element).closest('li').attr('id'));
+function deleteDownloadLink(element) {
+    $(element).closest('tr').remove();
+    const index = parseInt($(element).closest('tr').attr('id'));
     downloadURLs.splice(index - 1, 1);
     downloadURLCount = downloadURLCount - 1;
 }

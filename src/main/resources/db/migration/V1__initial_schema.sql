@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS games (
     description TEXT NOT NULL,
     release_year INT,
     developer_id INT NOT NULL REFERENCES developers(id) ON DELETE CASCADE,
-    publisher_id INT NOT NULL REFERENCES publishers(id) ON DELETE CASCADE,
     status VARCHAR(50) NOT NULL,
     cover_image TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
@@ -43,10 +42,18 @@ CREATE TABLE IF NOT EXISTS game_genres (
     PRIMARY KEY (game_id, genre_id)
 );
 
+CREATE TABLE IF NOT EXISTS game_publishers (
+    game_id BIGINT NOT NULL REFERENCES games(id) ON DELETE CASCADE,
+    publisher_id BIGINT NOT NULL REFERENCES publishers(id) ON DELETE CASCADE,
+    PRIMARY KEY (game_id, publisher_id)
+);
+
 CREATE TABLE IF NOT EXISTS downloads (
     id BIGSERIAL PRIMARY KEY,
-    game_id BIGINT NOT NULL REFERENCES games(id),
-    download_url TEXT NOT NULL
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    download_url TEXT NOT NULL,
+    game_id BIGINT NOT NULL REFERENCES games(id)
 );
 
 CREATE TABLE IF NOT EXISTS images (
