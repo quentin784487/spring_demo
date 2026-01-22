@@ -11,6 +11,8 @@ var selectedGame = null;
 var images = [];
 var imageCount = 0;
 var coverImage = '';
+var publisherCount = 0;
+var publishers = [];
 
 $(document).ready(function () {
     loadGames(currentPage, pageSize, title);
@@ -133,6 +135,27 @@ $(document).ready(function () {
         };
 
         reader.readAsDataURL(file);
+    });
+
+    $('#publisher').on('change', function () {
+        debugger;
+        const selectedValue = $(this).val();
+        const selectedText = $(this).find('option:selected').text();
+
+        if ($.inArray(selectedValue, publishers) == -1 && selectedValue !== 'intro') {
+            publisherCount = publisherCount + 1;
+            publishers.push(selectedValue);
+            $("#publisher-list").append(
+                "<li id=" + publisherCount + " class='list-group-item'>" +
+                "    <div class='d-flex justify-content-between'>" +
+                "        <label class='form-label align-self-center'>" + selectedText + "</label>" +
+                "        <button onclick='deletePublisher(this)' class='btn btn-danger btn-sm'>" +
+                "            <i class='bi bi-trash'></i>" +
+                "        </button>" +
+                "    </div>" +
+                "</li>"
+            );
+        }
     });
 
     function debounce(fn, delay) {
@@ -498,6 +521,13 @@ function deleteUrl(element) {
     const index = parseInt($(element).closest('li').attr('id'));
     downloadURLs.splice(index - 1, 1);
     downloadURLCount = downloadURLCount - 1;
+}
+
+function deletePublisher(element) {
+    $(element).closest('li').remove();
+    const index = parseInt($(element).closest('li').attr('id'));
+    publishers.splice(index - 1, 1);
+    publisherCount = publisherCount - 1;
 }
 
 function deleteImage(element) {
