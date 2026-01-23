@@ -1,8 +1,9 @@
-var baseUrl = 'http://localhost:8080';
+const baseUrl = 'http://localhost:8080';
+const pageSize = 10;
+
 var games = [];
 var downloadURLs = [];
 var downloadURLCount = 0;
-var pageSize = 10;
 var currentPage = 0;
 var resultCount = 0;
 var title = 'none';
@@ -13,6 +14,8 @@ var imageCount = 0;
 var coverImage = '';
 var publisherCount = 0;
 var publishers = [];
+var downloadLinkState = '';
+var downloadLinkIndex = 0;
 
 $(document).ready(function () {
     loadGames(currentPage, pageSize, title);
@@ -23,21 +26,13 @@ $(document).ready(function () {
     });
 
     $("#download-add").click(function () {
-        addDownload();
+        saveDownload();
     });
 
     $("#save").click(function () {
         if (!validateForm()) {
             $('#validation-message').prop('hidden', false);
         } else {
-            var downloads = [];
-            for (var i = 0; i < downloadURLs.length; i++) {
-                downloads.push(
-                    {
-                        "downloadUrl": downloadURLs[i]
-                    }
-                );
-            }
 
             const url = modalState == "edit" ? '/api/admin/games/' + $('#primary-key').text() : '/api/admin/games';
 
@@ -55,13 +50,15 @@ $(document).ready(function () {
                     "coverImage": coverImage,
                     "genre": parseInt($("#genre option:selected").val()),
                     "platform": parseInt($("#platform option:selected").val()),
-                    "downloads": downloads,
+                    "downloads": downloadURLs,
                     "images": images
                 }),
                 success: function (res) {
                     loadGames(currentPage, pageSize, title);
                     $("#crud-modal").modal("hide");
                     clearForm();
+                    $("#save-success-modal").modal("show");
+                    console.log(res);
                 },
                 error: function (xhr) {
                     console.error(xhr.responseText);
@@ -138,13 +135,18 @@ $(document).ready(function () {
     });
 
     $('#publisher').on('change', function () {
-        debugger;
         const selectedValue = $(this).val();
         const selectedText = $(this).find('option:selected').text();
 
         if ($.inArray(selectedValue, publishers) == -1 && selectedValue !== 'intro') {
             publisherCount = publisherCount + 1;
-            publishers.push(selectedValue);
+            publishers.push(
+                {
+                    id: selectedValue,
+                    name: selectedText
+                }
+            );
+
             $("#publisher-list").append(
                 "<li id=" + publisherCount + " class='list-group-item'>" +
                 "    <div class='d-flex justify-content-between'>" +
@@ -172,7 +174,7 @@ $(document).ready(function () {
         if (query.length < 2) return;
 
         getPublishers(query);
-    }, 400);
+    }, 1000);
 
     $('#publisher-search').on('input', publisherSearch);
 
@@ -182,7 +184,7 @@ $(document).ready(function () {
         if (query.length < 2) return;
 
         getDevelopers(query);
-    }, 400);
+    }, 1000);
 
     $('#developer-search').on('input', developerSearch);
 });
@@ -245,31 +247,6 @@ function navigate(action) {
     }
 }
 
-function clearForm() {
-    $("#title").val(null);
-    $("#description").val(null);
-    $("#releaseYear").val(null);
-    $("#developer").val(null);
-    $("#publisher").val(null);
-    $("#coverImageInput").val('');
-    $("#download-item").val(null);
-    $("#url-list").html('');
-    $("#url-list").append('<li class="list-group-item text-center">Items</li>');
-    $("#screenshot-list").html('');
-    $("#screenshot-list").append('<li class="list-group-item text-center">Items</li>');
-    $('#status').val('select');
-    $('#genre').val('intro');
-    $('#platform').val('intro');
-    $("#developer-search").val(null);
-    $("#developer").html('');
-    $("#developer").html('<option selected value="intro">Search developer name</option>');
-    $("#publisher-search").val(null);
-    $("#publisher").html('');
-    $("#publisher").html('<option selected value="intro">Search publisher name</option>');
-
-    downloadURLs = [];
-}
-
 function loadLookups() {
     $.ajax({
         url: baseUrl + '/api/admin/games/all-lookups',
@@ -312,7 +289,7 @@ function deleteGame(id) {
         success: function (res) {
             loadGames(currentPage, pageSize, title);
             $("#confirm-modal").modal("hide");
-            $("#success-modal").modal("show");
+            $("#delete-success-modal").modal("show");
         },
         error: function (xhr) {
             console.error(xhr.responseText);
@@ -374,7 +351,7 @@ function loadGames(page, size, title) {
                     "   <td>" + games[i].description + "</td>" +
                     "   <td>" + games[i].releaseYear + "</td>" +
                     "   <td>" + games[i].developer.name + "</td>" +
-                    "   <td>" + games[i].publisher.name + "</td>" +
+                    "   <td>" + games[i].publishers[0].name + "</td>" +
                     "   <td>" + games[i].status + "</td>" +
                     "   <td>" +
                     "       <div class='dropdown'>" +
@@ -426,10 +403,32 @@ function populateModalForm(game) {
     $("#releaseYear").val(game.releaseYear);
 
     getDevelopers(game.developer.name, game.developer.id);
-    getPublishers(game.publisher.name, game.publisher.id);
+
+    getPublishers(game.publishers[0].name, game.publishers[0].id);
+
+    for (var i = 0; i < game.publishers.length; i++) {
+        publisherCount = publisherCount + 1;
+        publishers.push(
+            {
+                id: game.publishers[i].id,
+                name: game.publishers[i].name
+            }
+        );
+
+        $("#publisher-list").append(
+            "<li id=" + publisherCount + " class='list-group-item'>" +
+            "    <div class='d-flex justify-content-between'>" +
+            "        <label class='form-label align-self-center'>" + game.publishers[i].name + "</label>" +
+            "        <button onclick='deletePublisher(this)' class='btn btn-danger btn-sm'>" +
+            "            <i class='bi bi-trash'></i>" +
+            "        </button>" +
+            "    </div>" +
+            "</li>"
+        );
+    }
 
     $("#coverImage").val(game.coverImage);
-    coverImage = game.coverImage
+    coverImage = game.coverImage;
     if (coverImage) {
         $("#coverImageLink").text('Upoaded Image');
     }
@@ -441,17 +440,31 @@ function populateModalForm(game) {
     downloadURLs = [];
 
     for (var i = 0; i < game.downloads.length; i++) {
-        downloadURLs.push(game.downloads[i].downloadUrl);
         downloadURLCount = downloadURLCount + 1;
-        $("#url-list").append(
-            "<li id=" + downloadURLCount + " class='list-group-item'>" +
-            "    <div class='d-flex justify-content-between'>" +
-            "        <label class='form-label align-self-center'>" + game.downloads[i].downloadUrl + "</label>" +
-            "        <button onclick='deleteUrl(this)' class='btn btn-danger btn-sm'>" +
-            "            <i class='bi bi-trash'></i>" +
-            "        </button>" +
-            "    </div>" +
-            "</li>"
+        downloadURLs.push(
+            {
+                "link": game.downloads[i].downloadUrl,
+                "name": game.downloads[i].name,
+                "type": game.downloads[i].type
+            }
+        );
+
+        $("#link-table-body").append(
+            "<tr id='" + downloadURLCount + "'> " +
+            "   <td>" + game.downloads[i].type + "</td>" +
+            "   <td>" + game.downloads[i].name + "</td>" +
+            "   <td>" +
+            "       <div class='dropdown'>" +
+            "           <button class='btn btn-secondary dropdown-toggle' type='button' data-bs-toggle='dropdown' aria-expanded='false'>" +
+            "               Actions" +
+            "           </button>" +
+            "           <ul class='dropdown-menu'>" +
+            "               <li><a onclick=editDownloadLink(this) class='dropdown-item' href='#'>Edit</a></li>" +
+            "               <li><a onclick='deleteDownloadLink(this)' class='dropdown-item' href='#'>Delete</a></li>" +
+            "           </ul>" +
+            "       </div>" +
+            "   </td>" +
+            "</tr>"
         );
     }
 
@@ -498,37 +511,69 @@ function previewCoverImage() {
     }
 }
 
-function addDownload() {
+function saveDownload() {
     if ($("#download-url").val() != '' && $("#download-name").val() != '' && $("#download-type option:selected").val() != 'select') {
-        downloadURLCount = downloadURLCount + 1;
-        downloadURLs.push(
-            {
-                "link": $("#download-url").val(),
-                "name": $("#download-name").val(),
-                "type": $("#download-type").val()
-            }
-        );
+        if (downloadLinkState == 'edit') {
+            downloadURLs[downloadLinkIndex].link = $("#download-url").val();
+            downloadURLs[downloadLinkIndex].name = $("#download-name").val();
+            downloadURLs[downloadLinkIndex].type = $("#download-type").val();
+            $("#link-table-body").html('');
+            downloadURLCount = 0;
 
-        $("#link-table-body").append(
-            "<tr id='" + downloadURLCount + "'> " +
-            "   <td>" + $("#download-type option:selected").text() + "</td>" +
-            "   <td>" + $("#download-name").val() + "</td>" +            
-            "   <td>" +
-            "       <div class='dropdown'>" +
-            "           <button class='btn btn-secondary dropdown-toggle' type='button' data-bs-toggle='dropdown' aria-expanded='false'>" +
-            "               Actions" +
-            "           </button>" +
-            "           <ul class='dropdown-menu'>" +
-            "               <li><a class='dropdown-item' href='#'>Edit</a></li>" +
-            "               <li><a onclick='deleteDownloadLink(this)' class='dropdown-item' href='#'>Delete</a></li>" +
-            "           </ul>" +
-            "       </div>" +
-            "   </td>" +
-            "</tr>"
-        );
+            for (var i = 0; i < downloadURLs.length; i++) {
+                downloadURLCount = downloadURLCount + 1;
+
+                $("#link-table-body").append(
+                    "<tr id='" + downloadURLCount + "'> " +
+                    "   <td>" + downloadURLs[i].type + "</td>" +
+                    "   <td>" + downloadURLs[i].name + "</td>" +
+                    "   <td>" +
+                    "       <div class='dropdown'>" +
+                    "           <button class='btn btn-secondary dropdown-toggle' type='button' data-bs-toggle='dropdown' aria-expanded='false'>" +
+                    "               Actions" +
+                    "           </button>" +
+                    "           <ul class='dropdown-menu'>" +
+                    "               <li><a onclick=editDownloadLink(this) class='dropdown-item' href='#'>Edit</a></li>" +
+                    "               <li><a onclick='deleteDownloadLink(this)' class='dropdown-item' href='#'>Delete</a></li>" +
+                    "           </ul>" +
+                    "       </div>" +
+                    "   </td>" +
+                    "</tr>"
+                );
+            }
+        } else {
+            downloadLinkState = 'add';
+            downloadURLCount = downloadURLCount + 1;
+            downloadURLs.push(
+                {
+                    "link": $("#download-url").val(),
+                    "name": $("#download-name").val(),
+                    "type": $("#download-type").val()
+                }
+            );
+
+            $("#link-table-body").append(
+                "<tr id='" + downloadURLCount + "'> " +
+                "   <td>" + $("#download-type option:selected").text() + "</td>" +
+                "   <td>" + $("#download-name").val() + "</td>" +
+                "   <td>" +
+                "       <div class='dropdown'>" +
+                "           <button class='btn btn-secondary dropdown-toggle' type='button' data-bs-toggle='dropdown' aria-expanded='false'>" +
+                "               Actions" +
+                "           </button>" +
+                "           <ul class='dropdown-menu'>" +
+                "               <li><a onclick=editDownloadLink(this) class='dropdown-item' href='#'>Edit</a></li>" +
+                "               <li><a onclick='deleteDownloadLink(this)' class='dropdown-item' href='#'>Delete</a></li>" +
+                "           </ul>" +
+                "       </div>" +
+                "   </td>" +
+                "</tr>"
+            );
+        }
+
         $("#download-url").val('');
         $("#download-name").val('');
-        $("#download-type").val('select')
+        $("#download-type").val('select');
     }
 }
 
@@ -537,6 +582,16 @@ function deleteDownloadLink(element) {
     const index = parseInt($(element).closest('tr').attr('id'));
     downloadURLs.splice(index - 1, 1);
     downloadURLCount = downloadURLCount - 1;
+}
+
+function editDownloadLink(element) {
+    downloadLinkState = 'edit';
+    const index = parseInt($(element).closest('tr').attr('id'));
+    downloadLinkIndex = index - 1;
+    $("#download-url").val(downloadURLs[index - 1].link);
+    $("#download-name").val(downloadURLs[index - 1].name);
+    $("#download-type").val(downloadURLs[index - 1].type);
+    $("#download-url").focus();
 }
 
 function deletePublisher(element) {
@@ -551,6 +606,38 @@ function deleteImage(element) {
     const index = parseInt($(element).closest('li').attr('id'));
     images.splice(index - 1, 1);
     imageCount = imageCount - 1;
+}
+
+function clearForm() {
+    $("#title").val(null);
+    $("#description").val(null);
+    $("#releaseYear").val(null);
+    $("#developer").val(null);
+    $("#publisher").val(null);
+    $("#coverImageInput").val('');
+    $("#download-item").val(null);
+    $("#link-table-body").html('');
+    $("#screenshot-list").html('');
+    $("#screenshot-list").append('<li class="list-group-item text-center">Items</li>');
+    $("#download-url").val('');
+    $("#download-name").val('');
+    $("#download-type").val('select');
+    $('#status').val('select');
+    $('#genre').val('intro');
+    $('#platform').val('intro');
+    $("#developer-search").val(null);
+    $("#developer").html('');
+    $("#developer").html('<option selected value="intro">Search developer name</option>');
+    $("#publisher-search").val(null);
+    $("#publisher").html('');
+    $("#publisher").html('<option selected value="intro">Search publisher name</option>');
+    $("#publisher-list").html('');
+    $("#coverImageLink").text('Please select an image file.');
+
+    downloadURLs = [];
+    images = [];
+    publishers = [];
+    coverImage = '';
 }
 
 function validateForm() {
@@ -570,7 +657,7 @@ function validateForm() {
         return false;
     }
 
-    if ($("#publisher").val() == '') {
+    if (publishers.length < 1) {
         return false;
     }
 
@@ -591,10 +678,6 @@ function validateForm() {
     }
 
     if ($("#developer option:selected").val() == 'intro') {
-        return false;
-    }
-
-    if ($("#publisher option:selected").val() == 'intro') {
         return false;
     }
 

@@ -209,6 +209,8 @@ public class GameService {
             for (DownloadRequest d : request.downloads()) {
                 Download download = new Download();
                 download.setDownloadUrl(d.link());
+                download.setName(d.name());
+                download.setType(d.type());
                 game.addDownload(download);
             }
         }
@@ -278,6 +280,8 @@ public class GameService {
             for (DownloadRequest d : request.downloads()) {
                 Download download = new Download();
                 download.setDownloadUrl(d.link());
+                download.setName(d.name());
+                download.setType(d.type());
                 game.addDownload(download);
             }
         }
