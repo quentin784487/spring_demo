@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -61,11 +63,13 @@ public class Game {
             joinColumns = @JoinColumn(name = "game_id"),
             inverseJoinColumns = @JoinColumn(name = "publisher_id")
     )
-    private Set<Publisher> publishers = new HashSet<>();
+    @OrderBy("name DESC")
+    private List<Publisher> publishers = new ArrayList<>();
 
     /* Downloads */
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Download> downloads = new HashSet<>();
+    @OrderBy("type ASC")
+    private List<Download> downloads = new ArrayList<>();
 
     /* Images */
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)

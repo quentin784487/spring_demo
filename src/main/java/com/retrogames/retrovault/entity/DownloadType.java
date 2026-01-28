@@ -4,5 +4,10 @@ public enum DownloadType {
     DOWNLOAD,
     DEMO,
     MISC,
-    MANUAL
+    MANUAL,
+    PATCH,
+    GUIDE,
+    PURCHASE,
+    MOD,
+    REFCARD
 }

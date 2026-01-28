@@ -84,21 +84,25 @@ $(document).ready(function () {
     });
 
     $('#fileInput').on('change', function () {
-        const file = this.files[0];
+        const files = $(this)[0].files;
 
-        if (!file) return;
+        if (!files.length) {
+            alert('No files selected');
+            return;
+        }
 
-        const reader = new FileReader();
+        Array.from(files).forEach(file => {
+            const reader = new FileReader();
 
-        reader.onload = function (e) {
-            const base64 = e.target.result;
+            reader.onload = function (event) {
 
-            images.push(
-                {
-                    "imageBase64": base64,
-                    "fileName": file.name
-                }
-            );
+                images.push(
+                    {
+                        "imageBase64": event.target.result,
+                        "fileName": file.name
+                    }
+                );
+            };
 
             imageCount = imageCount + 1;
 
@@ -113,10 +117,14 @@ $(document).ready(function () {
                 "</li>"
             );
 
-            $("#fileInput").val('');
-        };
+            reader.onerror = function () {
+                console.error('Error reading file:', file.name);
+            };
 
-        reader.readAsDataURL(file);
+            reader.readAsDataURL(file); // converts to Base64
+        });
+
+        $("#fileInput").val('');
     });
 
     $('#coverImageInput').on('change', function () {
@@ -148,6 +156,32 @@ $(document).ready(function () {
             );
 
             $("#publisher-list").append(
+                "<li id=" + publisherCount + " class='list-group-item'>" +
+                "    <div class='d-flex justify-content-between'>" +
+                "        <label class='form-label align-self-center'>" + selectedText + "</label>" +
+                "        <button onclick='deletePublisher(this)' class='btn btn-danger btn-sm'>" +
+                "            <i class='bi bi-trash'></i>" +
+                "        </button>" +
+                "    </div>" +
+                "</li>"
+            );
+        }
+    });
+
+    $('#developer').on('change', function () {
+        const selectedValue = $(this).val();
+        const selectedText = $(this).find('option:selected').text();
+
+        if ($.inArray(selectedValue, publishers) == -1 && selectedValue !== 'intro') {
+            publisherCount = publisherCount + 1;
+            publishers.push(
+                {
+                    id: selectedValue,
+                    name: selectedText
+                }
+            );
+
+            $("#developer-list").append(
                 "<li id=" + publisherCount + " class='list-group-item'>" +
                 "    <div class='d-flex justify-content-between'>" +
                 "        <label class='form-label align-self-center'>" + selectedText + "</label>" +
@@ -209,6 +243,8 @@ function getPublishers(name, id) {
             if (id) {
                 $("#publisher").val(id);
             }
+
+            $("#publisher-search").val('');
         }
     });
 }
@@ -233,6 +269,8 @@ function getDevelopers(name, id) {
             if (id) {
                 $("#developer").val(id);
             }
+
+            $("#developer-search").val('');
         }
     });
 }
@@ -297,6 +335,12 @@ function deleteGame(id) {
     });
 }
 
+function truncateString(str, maxLength) {
+    return str.length > maxLength
+        ? str.substring(0, maxLength) + '...'
+        : str;
+}
+
 function loadGames(page, size, title) {
     $.ajax({
         url: baseUrl + '/api/admin/games' + '?page=' + page + '&size=' + size + '&title=' + title,
@@ -348,7 +392,7 @@ function loadGames(page, size, title) {
                 $("#table-body").append(
                     "<tr id='" + response.content[i].id + "'> " +
                     "   <td>" + response.content[i].title + "</td>" +
-                    "   <td>" + games[i].description + "</td>" +
+                    "   <td>" + truncateString(games[i].description, 50) + "</td>" +
                     "   <td>" + games[i].releaseYear + "</td>" +
                     "   <td>" + games[i].developer.name + "</td>" +
                     "   <td>" + games[i].publishers[0].name + "</td>" +
@@ -396,6 +440,8 @@ function loadGames(page, size, title) {
 }
 
 function populateModalForm(game) {
+    downloadURLCount = 0;
+    imageCount = 0;
     $("#modal-title").text("Edit Game");
     $("#primary-key").text(game.id);
     $("#title").val(game.title);
@@ -574,12 +620,14 @@ function saveDownload() {
         $("#download-url").val('');
         $("#download-name").val('');
         $("#download-type").val('select');
+        downloadLinkState = 'add';
     }
 }
 
 function deleteDownloadLink(element) {
-    $(element).closest('tr').remove();
+    debugger;    
     const index = parseInt($(element).closest('tr').attr('id'));
+    $(element).closest('tr').remove();
     downloadURLs.splice(index - 1, 1);
     downloadURLCount = downloadURLCount - 1;
 }
@@ -594,16 +642,16 @@ function editDownloadLink(element) {
     $("#download-url").focus();
 }
 
-function deletePublisher(element) {
-    $(element).closest('li').remove();
+function deletePublisher(element) {    
     const index = parseInt($(element).closest('li').attr('id'));
+    $(element).closest('li').remove();
     publishers.splice(index - 1, 1);
     publisherCount = publisherCount - 1;
 }
 
-function deleteImage(element) {
-    $(element).closest('li').remove();
+function deleteImage(element) {    
     const index = parseInt($(element).closest('li').attr('id'));
+    $(element).closest('li').remove();
     images.splice(index - 1, 1);
     imageCount = imageCount - 1;
 }

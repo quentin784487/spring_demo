@@ -65,7 +65,7 @@ public class GameService {
         );
     }
 
-    private List<LookupDTO> toPublisherDTO(Set<Publisher> publishers) {
+    private List<LookupDTO> toPublisherDTO(List<Publisher> publishers) {
         List<LookupDTO> _publishers = new ArrayList<>();
         for (Publisher publisher : publishers) {
             _publishers.add(new LookupDTO(
@@ -105,7 +105,7 @@ public class GameService {
         return _platforms;
     }
 
-    private List<DownloadDTO> toDownloadDTO(Set<Download> downloads) {
+    private List<DownloadDTO> toDownloadDTO(List<Download> downloads) {
         List<DownloadDTO> _downloads = new ArrayList<>();
         for (Download download : downloads) {
             _downloads.add(new DownloadDTO(
@@ -130,10 +130,10 @@ public class GameService {
         return _images;
     }
 
-    private Set<Publisher> toPublisherSet(Set<PublisherRequest> publisherRequests) {
-        Set<Publisher> publishers = new java.util.HashSet<>();
+    private List<Publisher> toPublisherList(Set<PublisherRequest> publisherRequests) {
+        List<Publisher> publishers = new ArrayList<>();
         for (PublisherRequest pr : publisherRequests) {
-            Optional<Publisher> publisher = publisherRepository.findById(pr.id());
+            Optional<Publisher> publisher = publisherRepository.findByIdOrderByIdAsc(pr.id());
             publishers.add(publisher.orElse(null));
         }
         return publishers;
@@ -152,7 +152,7 @@ public class GameService {
     }
 
     public List<Publisher> getPublishersContainingName(String name) {
-        return publisherRepository.findByNameContainingIgnoreCase(name);
+        return publisherRepository.findByNameContainingIgnoreCaseOrderByIdAsc(name);
     }
 
     public LookupResponse getAllLookups() {
@@ -179,7 +179,7 @@ public class GameService {
             game.setDeveloper(developer);
         }
 
-        Set<Publisher> publishers = toPublisherSet(request.publishers());
+        List<Publisher> publishers = toPublisherList(request.publishers());
 
         if (!publishers.isEmpty()) {
             game.setPublishers(publishers);
@@ -243,7 +243,7 @@ public class GameService {
             game.setDeveloper(developer);
         }
 
-        Set<Publisher> publishers = toPublisherSet(request.publishers());
+        List<Publisher> publishers = toPublisherList(request.publishers());
 
         game.getPublishers().clear();
 
@@ -275,6 +275,7 @@ public class GameService {
         }
 
         // Downloads
+
         game.getDownloads().clear();
         if (request.downloads() != null) {
             for (DownloadRequest d : request.downloads()) {
