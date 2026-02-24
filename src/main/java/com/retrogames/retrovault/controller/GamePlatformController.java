@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/platforms")
+@RequestMapping("/api/public/platforms")
 @RequiredArgsConstructor
 public class GamePlatformController {
     private final GameService service;

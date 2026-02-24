@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-2">
+      <categories-component 
+        genres="vm.genres" 
+        on-select="vm.onGenreSelected(genre)">
+      </categories-component>
+      <br />
+      <dos-games-component></dos-games-component>
+    </div>
+    <div class="col-md-8">
+      <gamelisting-component 
+        title="vm.title"
+        games="vm.games" 
+        alphabet="vm.alphabet" 
+        on-select="vm.searchStartsWith(letter)" 
+        on-search="vm.searchContaining(title)">
+      </gamelisting-component>
+    </div>
+    <div class="col-md-2">
+      <div class="card">
+        <div class="card-header">
+          Right content
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Special title treatment</h5>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+      <div class="card mt-4">
+        <div class="card-header">
+          Right content
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Special title treatment</h5>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

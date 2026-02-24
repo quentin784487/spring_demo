@@ -34,7 +34,7 @@ $(document).ready(function () {
             $('#validation-message').prop('hidden', false);
         } else {
 
-            const url = modalState == "edit" ? '/api/admin/games/' + $('#primary-key').text() : '/api/admin/games';
+            const url = modalState == "edit" ? '/api/public/games/' + $('#primary-key').text() : '/api/public/games';
 
             $.ajax({
                 url: baseUrl + url,
@@ -224,8 +224,9 @@ $(document).ready(function () {
 });
 
 function getPublishers(name, id) {
+    debugger;
     $.ajax({
-        url: 'http://localhost:8080/api/admin/publishers?name=' + name,
+        url: baseUrl + '/api/public/publishers?name=' + name,
         success: function (data) {
             if (data.length == 0) {
                 $("#publisher").html('<option selected value="intro">No publishers found...</option>');
@@ -251,7 +252,7 @@ function getPublishers(name, id) {
 
 function getDevelopers(name, id) {
     $.ajax({
-        url: 'http://localhost:8080/api/admin/developers?name=' + name,
+        url: baseUrl + '/api/public/developers?name=' + name,
         success: function (data) {
             if (data.length == 0) {
                 $("#developer").html('<option selected value="intro">No developers found...</option>');
@@ -287,7 +288,7 @@ function navigate(action) {
 
 function loadLookups() {
     $.ajax({
-        url: baseUrl + '/api/admin/games/all-lookups',
+        url: baseUrl + '/api/public/games/all-lookups',
         method: 'GET',
         dataType: 'json',
         success: function (response) {
@@ -322,7 +323,7 @@ function loadLookups() {
 
 function deleteGame(id) {
     $.ajax({
-        url: baseUrl + '/api/admin/games/' + id,
+        url: baseUrl + '/api/public/games/' + id,
         method: 'DELETE',
         success: function (res) {
             loadGames(currentPage, pageSize, title);
@@ -343,7 +344,7 @@ function truncateString(str, maxLength) {
 
 function loadGames(page, size, title) {
     $.ajax({
-        url: baseUrl + '/api/admin/games' + '?page=' + page + '&size=' + size + '&title=' + title,
+        url: baseUrl + '/api/public/games' + '?page=' + page + '&size=' + size + '&title=' + title,
         method: 'GET',
         dataType: 'json',
         success: function (response) {

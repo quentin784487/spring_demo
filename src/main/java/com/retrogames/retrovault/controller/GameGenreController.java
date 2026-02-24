@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/genres")
+@RequestMapping("/api/public/genres")
 @RequiredArgsConstructor
 public class GameGenreController {
     private final GameService service;

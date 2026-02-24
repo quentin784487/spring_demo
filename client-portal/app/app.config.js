@@ -8,9 +8,9 @@
       $urlRouterProvider.otherwise('/');
 
       $stateProvider
-        .state('home', {
+        .state('main', {
           url: '/',
-          templateUrl: 'app/components/home.component/home.component.html',
+          templateUrl: 'app/components/main.component/main.component.html',
           controller: 'MainController',
           controllerAs: 'vm'
         })

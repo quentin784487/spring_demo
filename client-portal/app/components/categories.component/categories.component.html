@@ -3,12 +3,11 @@
         Categories
     </div>
     <div class="card-body">
-        <ul>
-            <li><a href="#">Adventure</a></li>
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Puzzle</a></li>
-            <li><a href="#">Racing</a></li>
-            <li><a href="#">Sport</a></li>
+        <ul class="list-group">
+            <li class="list-group-item"
+                ng-repeat="genre in $ctrl.genres track by genre.id">
+                <a href="#" ng-click="$ctrl.select(genre)">{{ genre.name }}</a>
+            </li>
         </ul>
     </div>
 </div>

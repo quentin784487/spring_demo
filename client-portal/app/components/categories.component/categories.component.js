@@ -6,13 +6,14 @@
     .component('categoriesComponent', {
       templateUrl: 'app/components/categories.component/categories.component.html',
       bindings: {
-        title: '@'
+        title: '@',
+        genres: '<',
+        onSelect: '&'
       },
       controller: function () {
         var vm = this;
-
-        vm.$onInit = function () {
-          
+        vm.select = function (genre) {
+          vm.onSelect({ genre: genre });
         };
       }
     });

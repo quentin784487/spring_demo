@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/developers")
+@RequestMapping("/api/public/developers")
 @RequiredArgsConstructor
 public class GameDeveloperController {
     private final GameService service;
