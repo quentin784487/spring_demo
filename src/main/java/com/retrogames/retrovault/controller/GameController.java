@@ -1,6 +1,7 @@
 package com.retrogames.retrovault.controller;
 
 import com.retrogames.retrovault.entity.Game;
+import com.retrogames.retrovault.entity.ReturnType;
 import com.retrogames.retrovault.entity.SearchMethod;
 import com.retrogames.retrovault.request.GameRequest;
 import com.retrogames.retrovault.response.GameResponse;
@@ -37,13 +38,14 @@ public class GameController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false, defaultValue = "") String title,
             @RequestParam(required = false, defaultValue = "CONTAINING") SearchMethod method,
-            @RequestParam(required = false, defaultValue = "0") Integer genre
+            @RequestParam(required = false, defaultValue = "0") Integer genre,
+            @RequestParam(required = false, defaultValue = "FULL") ReturnType returnType
             ) {
-        return service.list(page, size, title, method, genre);
+        return service.list(page, size, title, method, genre, returnType);
     }
 
     @GetMapping("/{id}")
-    public Game get(@PathVariable Long id) {
+    public GameResponse get(@PathVariable Long id) {
         return service.get(id);
     }
 

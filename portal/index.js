@@ -136,7 +136,7 @@ $(document).ready(function () {
 
         reader.onload = function (e) {
             coverImage = e.target.result;
-            $("#coverImageLink").text('Upoaded Image');
+            $("#coverImageLink").text('Uploaded Image');
         };
 
         reader.readAsDataURL(file);
@@ -344,7 +344,7 @@ function truncateString(str, maxLength) {
 
 function loadGames(page, size, title) {
     $.ajax({
-        url: baseUrl + '/api/public/games' + '?page=' + page + '&size=' + size + '&title=' + title,
+        url: baseUrl + '/api/public/games' + '?page=' + page + '&size=' + size + '&title=' + title + '&method=ALL' + '&genre=0',
         method: 'GET',
         dataType: 'json',
         success: function (response) {

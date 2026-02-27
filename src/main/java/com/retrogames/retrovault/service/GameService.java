@@ -8,13 +8,10 @@ import com.retrogames.retrovault.mapper.*;
 import com.retrogames.retrovault.response.GameResponse;
 import com.retrogames.retrovault.response.LookupResponse;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,31 +31,27 @@ public class GameService {
                                    int size,
                                    String title,
                                    SearchMethod method,
-                                   Integer genre) {
-        Pageable pageable = PageRequest.of(
-                page,
-                size,
-                Sort.by("id").descending()
-        );
+                                   Integer genre,
+                                   ReturnType returnType) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+
+        Page<Game> games;
 
         if (method.equals(SearchMethod.CONTAINING) && !title.isEmpty()) {
-            Page<Game> games = gameRepository.findByTitleContainingIgnoreCase(title, pageable);
-            return games.map(Mappers::toGameListDto);
-        }
-
-        if (method.equals(SearchMethod.STARTSWITH) && !title.isEmpty()) {
-            Page<Game> games = gameRepository.findByTitleStartingWithIgnoreCase(title, pageable);
-            return games.map(Mappers::toGameListDto);
-        }
-
-        if (genre > 0) {
+            games = gameRepository.findByTitleContainingIgnoreCase(title, pageable);
+        } else if (method.equals(SearchMethod.STARTSWITH) && !title.isEmpty()) {
+            games = gameRepository.findByTitleStartingWithIgnoreCase(title, pageable);
+        } else if (genre > 0) {
             Set<Genre> _genres = genreRepository.findById(genre);
-            Page<Game> games = gameRepository.findByGenres(_genres, pageable);
-            return games.map(Mappers::toGameListDto);
+            games = gameRepository.findByGenres(_genres, pageable);
+        } else {
+            games = gameRepository.findAll(pageable);
         }
 
-        Page<Game> games = gameRepository.findAll(pageable);
-        return games.map(Mappers::toGameListDto);
+        if (returnType.equals(ReturnType.FULL))
+            return games.map(Mappers::toGameDto);
+        else
+            return games.map(Mappers::toGameClientDto);
     }
 
     public List<Genre> getAllGenres() {
@@ -84,9 +77,9 @@ public class GameService {
         );
     }
 
-    public Game get(Long id) {
-        return gameRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Game not found"));
+    public GameResponse get(Long id) {
+        Game game = gameRepository.findById(id).orElseThrow(() -> new RuntimeException("Game not found"));
+        return Mappers.toGameDto(game);
     }
 
     public void create(GameRequest request) {

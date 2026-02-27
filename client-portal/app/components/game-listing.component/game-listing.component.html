@@ -1,0 +1,78 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="input-group mb-3">
+          <input id="title-filter" type="text" class="form-control" placeholder="Title" aria-label="Title"
+            aria-describedby="add-url" ng-model="$ctrl.title">
+          <button class="btn btn-outline-secondary" type="button" id="search"
+            ng-click="$ctrl.search($ctrl.title)">Search</button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="d-flex justify-content-between alphabet-bar">
+        <span ng-repeat="letter in $ctrl.alphabet track by letter">
+          <a href="#" ng-click="$ctrl.selectLetter(letter)">{{ letter }}</a>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row p-3 game-row" ng-repeat="game in $ctrl.games">
+      <div class="col-md-2 d-flex align-items-center">
+        <img class="img-fluid" ng-src="{{ game.coverImage }}" alt="{{ game.title }}" />
+      </div>
+      <div class="col-md-4">
+        <a href="#" ng-click="$ctrl.selectGame(game)">{{ game.title }}</a>
+        <p class="game-detail">Category: {{ game.genres[0].name }}</p>
+        <p class="game-detail">Release Year: {{ game.releaseYear }}</p>
+        <p class="game-detail">
+          <span ng-repeat="platform in game.platforms">
+            Platform: {{ platform.name }}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <p></p>
+      </div>
+    </div>
+    <div class="row justify-content-center" ng-if="$ctrl.totalPages > 0">
+      <div class="col-md-4">
+        <nav aria-label="Page navigation">
+          <ul class="pagination">
+
+            <!-- Previous -->
+            <li class="page-item" ng-class="{disabled: $ctrl.currentPage === 0}">
+              <a class="page-link" ng-click="$ctrl.setPage($ctrl.currentPage - 1)" style="cursor: pointer;">
+                Previous
+              </a>
+            </li>
+
+            <!-- Page Numbers -->
+            <li class="page-item" ng-repeat="page in $ctrl.pages track by page"
+              ng-class="{active: $ctrl.currentPage === page}">
+              <a class="page-link" ng-click="$ctrl.setPage(page)" style="cursor: pointer;">
+                {{ page + 1 }}
+              </a>
+            </li>
+
+            <!-- Next -->
+            <li class="page-item" ng-class="{disabled: $ctrl.currentPage + 1 === $ctrl.totalPages}">
+              <a class="page-link" ng-click="$ctrl.setPage($ctrl.currentPage + 1)" style="cursor: pointer;">
+                Next
+              </a>
+            </li>
+
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <div class="row" ng-if="$ctrl.totalPages === 0">
+      <div class="col-md-12 text-center">
+        <br/>
+        <p>No games found.</p>
+      </div>
+    </div>
+  </div>
+</div>

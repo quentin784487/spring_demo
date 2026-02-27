@@ -17,7 +17,7 @@ import java.util.Set;
 
     private Mappers(){}
 
-    public static GameResponse toGameListDto(Game game) {
+    public static GameResponse toGameDto(Game game) {
         return new GameResponse(
                 game.getId(),
                 game.getTitle(),
@@ -31,6 +31,23 @@ import java.util.Set;
                 toPlatformDTO(game.getPlatforms()),
                 toDownloadDTO(game.getDownloads()),
                 toImageDTO(game.getImages())
+        );
+    }
+
+    public static GameResponse toGameClientDto(Game game) {
+        return new GameResponse(
+                game.getId(),
+                game.getTitle(),
+                null,
+                game.getReleaseYear(),
+                null,
+                null,
+                game.getStatus(),
+                game.getCoverImage(),
+                null,
+                toPlatformDTO(game.getPlatforms()),
+                null,
+                null
         );
     }
 

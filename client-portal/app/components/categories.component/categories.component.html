@@ -3,9 +3,8 @@
         Categories
     </div>
     <div class="card-body">
-        <ul class="list-group">
-            <li class="list-group-item"
-                ng-repeat="genre in $ctrl.genres track by genre.id">
+        <ul>
+            <li ng-repeat="genre in $ctrl.genres track by genre.id">
                 <a href="#" ng-click="$ctrl.select(genre)">{{ genre.name }}</a>
             </li>
         </ul>

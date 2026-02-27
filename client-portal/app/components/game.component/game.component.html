@@ -1,0 +1,90 @@
+<div class="container-fuid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header d-flex align-items-center">
+                    <h2>{{ $ctrl.game.title }}</h2>
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close" ng-click="$ctrl.close()"></button>
+                </div>
+                <div class="card-body">                    
+                    <h5>Game Information</h5>
+                    <hr />
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>Developer:</td>
+                                <td>
+                                    <p>{{ $ctrl.game.developer.name }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Publisher(s):</td>
+                                <td>
+                                    <p>
+                                        <span ng-repeat="publisher in $ctrl.game.publishers track by $index">
+                                            {{ publisher.name }}<span
+                                                ng-if="$ctrl.game.publishers.length - 1 > $index">, </span>
+                                        </span>
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Status:</td>
+                                <td>
+                                    <p>{{ $ctrl.game.status }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Category:</td>
+                                <td>
+                                    <p>{{ $ctrl.game.genres[0].name }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Year:</td>
+                                <td>
+                                    <p>{{ $ctrl.game.releaseYear }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Platform:</td>
+                                <td>
+                                    <p>{{ $ctrl.game.platforms[0].name }}</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>Game description:</p>
+                    <p>
+                        {{ $ctrl.isExpanded ? $ctrl.game.description : ($ctrl.game.description | limitTo:$ctrl.limit) }}
+                        <span ng-if="$ctrl.game.description.length > $ctrl.limit">
+                            <a href="" ng-click="$ctrl.toggle()">
+                                {{ $ctrl.isExpanded ? ' Read less' : '... Read more' }}
+                            </a>
+                        </span>
+                    </p>
+                    <p>Download Links:</p>
+                    <table class="table table-striped-columns">
+                        <tbody>
+                            <tr ng-repeat="link in $ctrl.game.downloads">
+                                <td>
+                                    <a href="{{ link.downloadUrl }}" type="button" class="btn btn-primary w-100"
+                                        download>{{ link.type }}</a>
+                                </td>
+                                <td>
+                                    {{ link.name }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>Game screenshots</p>
+                    <div class="row img-row">
+                        <div class="col-md-3 p-3" ng-repeat="image in $ctrl.game.images">
+                            <img class="img-fluid" ng-src="{{ image.image }}" alt="{{ image.fileName }}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

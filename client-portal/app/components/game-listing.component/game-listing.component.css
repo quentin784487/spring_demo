@@ -1,0 +1,13 @@
+.fixed-image {
+    width: 100%;
+}
+
+.game-row {
+    height: 150px; 
+    background-color: var(--bs-card-cap-bg); 
+    margin: 5px;
+}
+
+.game-detail {
+    margin-bottom: 0rem;
+}

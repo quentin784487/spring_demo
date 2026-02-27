@@ -1,21 +1,31 @@
 <div class="container">
   <div class="row">
     <div class="col-md-2">
-      <categories-component 
+      <categories-component         
         genres="vm.genres" 
         on-select="vm.onGenreSelected(genre)">
       </categories-component>
       <br />
       <dos-games-component></dos-games-component>
     </div>
-    <div class="col-md-8">
-      <gamelisting-component 
+    <div class="col-md-8" ng-switch="vm.activeComponent">
+      <game-listing-component 
+        ng-switch-when="list"
         title="vm.title"
+        current-page="vm.currentPage"
+        total-pages="vm.totalPages"
         games="vm.games" 
         alphabet="vm.alphabet" 
-        on-select="vm.searchStartsWith(letter)" 
-        on-search="vm.searchContaining(title)">
-      </gamelisting-component>
+        on-select-letter="vm.searchStartsWith(letter)" 
+        on-select-game="vm.selectGame(game)"
+        on-search="vm.searchContaining(title)"
+        on-page-change="vm.setPage(page)">
+      </game-listing-component>
+      <game-component
+        ng-switch-when="details"
+        game-id="vm.gameId"
+        on-close="vm.showList()">
+      </game-component>
     </div>
     <div class="col-md-2">
       <div class="card">
