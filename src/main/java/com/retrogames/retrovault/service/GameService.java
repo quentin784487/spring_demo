@@ -27,14 +27,8 @@ public class GameService {
     private final DeveloperRepository developerRepository;
     private final PublisherRepository publisherRepository;
 
-    public Page<GameResponse> list(int page,
-                                   int size,
-                                   String title,
-                                   SearchMethod method,
-                                   Integer genre,
-                                   ReturnType returnType) {
+    public Page<GameResponse> list(int page, int size, String title, SearchMethod method, Integer genre, ReturnType returnType) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-
         Page<Game> games;
 
         if (method.equals(SearchMethod.CONTAINING) && !title.isEmpty()) {
