@@ -224,7 +224,6 @@ $(document).ready(function () {
 });
 
 function getPublishers(name, id) {
-    debugger;
     $.ajax({
         url: baseUrl + '/api/public/publishers?name=' + name,
         success: function (data) {
@@ -344,7 +343,7 @@ function truncateString(str, maxLength) {
 
 function loadGames(page, size, title) {
     $.ajax({
-        url: baseUrl + '/api/public/games' + '?page=' + page + '&size=' + size + '&title=' + title + '&method=ALL' + '&genre=0',
+        url: baseUrl + '/api/public/games' + '?page=' + page + '&size=' + size + '&title=' + title + '&method=ALL' + '&genre=0&returnType=FULL',
         method: 'GET',
         dataType: 'json',
         success: function (response) {
@@ -626,7 +625,6 @@ function saveDownload() {
 }
 
 function deleteDownloadLink(element) {
-    debugger;    
     const index = parseInt($(element).closest('tr').attr('id'));
     $(element).closest('tr').remove();
     downloadURLs.splice(index - 1, 1);

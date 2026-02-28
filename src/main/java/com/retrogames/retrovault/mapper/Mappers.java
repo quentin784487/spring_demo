@@ -44,7 +44,7 @@ import java.util.Set;
                 null,
                 game.getStatus(),
                 game.getCoverImage(),
-                null,
+                toGenreDTO(game.getGenres()),
                 toPlatformDTO(game.getPlatforms()),
                 null,
                 null
